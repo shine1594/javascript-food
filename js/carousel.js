@@ -24,12 +24,36 @@ function Carousel({ images, selector, imageType, dotStyle, effect }) {
 Carousel.prototype = {
   constructor: Carousel,
 
+  effects: {
+    current: null,
+    fadeIn(el, duration) {
+      el.style.opacity = 0;
+      const valuePerFrame = 1000 / (60 * duration);
+
+      const fade = () => {
+        el.style.opacity = Number(el.style.opacity).valueOf() + valuePerFrame;
+
+        if (el.style.opacity < 1) {
+          this.current = requestAnimationFrame(fade);
+        }
+      }
+
+      fade();
+    },
+    clear() {
+      if (this.current) {
+        cancelAnimationFrame(this.current);
+      }
+
+      this.current = null;
+    }
+  },
   init: function() {
     this.render();
     this.bindButtonEvent();
     this.bindPaginationEvent();
 
-    this.itemContainer.children[0].classList.add(this.options.effect);
+    this.effects.fadeIn(this.itemContainer.children[0], 300);
     this.pagination.children[0].classList.add(this.options.dotActivated);
   },
   render: function() {
@@ -90,8 +114,9 @@ Carousel.prototype = {
     const items = this.itemContainer.children;
     const dots = this.pagination.children;
 
-    items[currentIndex].classList.remove(this.options.effect);
-    items[nextIndex].classList.add(this.options.effect);
+    items[currentIndex].style.opacity = 0;
+    this.effects.clear();
+    this.effects.fadeIn(items[nextIndex], 1000);
 
     dots[currentIndex].classList.remove(this.options.dotActivated);
     dots[nextIndex].classList.add(this.options.dotActivated);
