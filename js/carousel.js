@@ -54,7 +54,7 @@ Carousel.prototype = {
     this.bindPaginationEvent();
 
     this.effects.fadeIn(this.itemContainer.children[0], 300);
-    this.pagination.children[0].classList.add(this.options.dotActivated);
+    this.pagination.children[0].classList.add(this.classNames.dotActivated);
   },
   render: function() {
     this.images.forEach((imageURL, index) => {
@@ -118,8 +118,8 @@ Carousel.prototype = {
     this.effects.clear();
     this.effects.fadeIn(items[nextIndex], 1000);
 
-    dots[currentIndex].classList.remove(this.options.dotActivated);
-    dots[nextIndex].classList.add(this.options.dotActivated);
+    dots[currentIndex].classList.remove(this.classNames.dotActivated);
+    dots[nextIndex].classList.add(this.classNames.dotActivated);
 
     this.itemContainer.dataset.currentIndex = nextIndex;
   }
